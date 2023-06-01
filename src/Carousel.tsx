@@ -317,13 +317,15 @@ export const Carousel = (props: Props) => {
   const horizontalMargin = useMemo(() => {
     if (slideAlign === 'center') {
       if (!currentContainerWidth) return 0
-      return currentContainerWidth / 2 - slideWidth / 2 - slideHorizontalOffset
+      const x = currentContainerWidth % (slideWidth + slideHorizontalOffset * 2)
+
+      return x / 2
     }
 
     if (slideAlign === 'left') return 0
 
     return slideAlign
-  }, [slideAlign, slideWidth, slideHorizontalOffset, currentContainerWidth])
+  }, [slideAlign, currentContainerWidth, slideWidth, slideHorizontalOffset])
 
   const slideStyle = slideStyles ?? [styles.slideWrapper, styles.shadow]
   const imageStyle = imageStyles ?? [{ width: slideWidth }, styles.image]
@@ -336,14 +338,14 @@ export const Carousel = (props: Props) => {
         styles.wrapper,
         {
           opacity: !currentContainerWidth ? 0 : 1,
-          width: currentContainerWidth,
         },
       ]}
     >
       <View>
         <ScrollView
           onLayout={(e) => {
-            if (!currentContainerWidth) {
+            if (currentContainerWidth !== e.nativeEvent.layout.width) {
+              console.log('NN: ', currentContainerWidth, e.nativeEvent.layout.width)
               setCurrentContainerWidth(e.nativeEvent.layout.width)
             }
           }}

@@ -1,12 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import {
-  Animated,
-  Dimensions,
-  SafeAreaView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { Animated, SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import {
   Carousel,
   DOTS_ANIMATION_TYPE,
@@ -27,8 +20,9 @@ const initialList: SlideItem[] = [
   },
 ]
 
-const CONTAINER_WIDTH = Dimensions.get('window').width
-const SLIDE_WIDTH = 200
+// const CONTAINER_WIDTH = Dimensions.get('window').width - 100
+const CONTAINER_WIDTH = 300
+const SLIDE_WIDTH = 150
 const SLIDE_HORIZONTAL_OFFSET = 10
 const FAKE_PER_SIDE = 3
 
@@ -77,68 +71,64 @@ export default function App() {
   }, [interpolationInputRange.LEFT_EDGE, interpolationInputRange.RIGHT_EDGE, myAnim])
 
   return (
-    <SafeAreaView style={[styles.container]}>
-      <Carousel
-        containerWidth={CONTAINER_WIDTH}
-        isAutoScroll={false}
-        fakeImagePerSide={FAKE_PER_SIDE}
-        images={initialList}
-        slideHorizontalOffset={SLIDE_HORIZONTAL_OFFSET}
-        slideWidth={SLIDE_WIDTH}
-        slideAlign='center'
-        slideAnimationType={SLIDE_ANIMATION_TYPE.MOVE_UP}
-        dotsAnimationType={DOTS_ANIMATION_TYPE.SCALE}
-        slideStyles={styles.slide}
-        imageProps={{ resizeMode: 'cover' }}
-        getScrollAnimation={(scrollAnimation) => (scrolling.current = scrollAnimation.current)}
-        // eslint-disable-next-line react/no-unstable-nested-components
-        customDots={(dots, scrollToIndex) => {
-          console.log(
-            'S: ',
-            DOT_FULL_WIDTH * initialList.length +
-              (CONTAINER_WIDTH - initialList.length * DOT_FULL_WIDTH) / 2 -
-              DOR_HORIZONTAL_MARGIN
-          )
-          return (
-            <View style={styles.dotsContainer}>
-              <View style={styles.dotsWrapper}>
-                <Animated.View
-                  style={[
-                    styles.dot,
-                    styles.movableDot,
-                    {
-                      transform: [
-                        {
-                          translateX: myAnim.interpolate({
-                            inputRange: [
-                              interpolationInputRange.LEFT_EDGE,
-                              interpolationInputRange.BUTTON_START,
-                              interpolationInputRange.BUTTON_END,
-                              interpolationInputRange.RIGHT_EDGE,
-                            ],
-                            outputRange: [
-                              interpolationOutputRange.LEFT_EDGE,
-                              interpolationOutputRange.BUTTON_START,
-                              interpolationOutputRange.BUTTON_END,
-                              interpolationOutputRange.RIGHT_EDGE,
-                            ],
-                            extrapolate: 'clamp',
-                          }),
-                        },
-                      ],
-                    },
-                  ]}
-                />
-                {dots.map((_, index) => (
-                  <TouchableOpacity key={index} onPress={() => scrollToIndex(index)}>
-                    <Animated.View style={styles.dot} />
-                  </TouchableOpacity>
-                ))}
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ backgroundColor: 'blue' }}>
+        <Carousel
+          // containerWidth={CONTAINER_WIDTH}
+          isAutoScroll={false}
+          fakeImagePerSide={FAKE_PER_SIDE}
+          images={initialList}
+          slideHorizontalOffset={SLIDE_HORIZONTAL_OFFSET}
+          slideWidth={SLIDE_WIDTH}
+          slideAlign='center'
+          slideAnimationType={SLIDE_ANIMATION_TYPE.NO_EFFECTS}
+          dotsAnimationType={DOTS_ANIMATION_TYPE.SCALE}
+          slideStyles={styles.slide}
+          imageProps={{ resizeMode: 'cover' }}
+          getScrollAnimation={(scrollAnimation) => (scrolling.current = scrollAnimation.current)}
+          // eslint-disable-next-line react/no-unstable-nested-components
+          customDots={(dots, scrollToIndex) => {
+            return (
+              <View style={styles.dotsContainer}>
+                <View style={styles.dotsWrapper}>
+                  <Animated.View
+                    style={[
+                      styles.dot,
+                      styles.movableDot,
+                      {
+                        transform: [
+                          {
+                            translateX: myAnim.interpolate({
+                              inputRange: [
+                                interpolationInputRange.LEFT_EDGE,
+                                interpolationInputRange.BUTTON_START,
+                                interpolationInputRange.BUTTON_END,
+                                interpolationInputRange.RIGHT_EDGE,
+                              ],
+                              outputRange: [
+                                interpolationOutputRange.LEFT_EDGE,
+                                interpolationOutputRange.BUTTON_START,
+                                interpolationOutputRange.BUTTON_END,
+                                interpolationOutputRange.RIGHT_EDGE,
+                              ],
+                              extrapolate: 'clamp',
+                            }),
+                          },
+                        ],
+                      },
+                    ]}
+                  />
+                  {dots.map((_, index) => (
+                    <TouchableOpacity key={index} onPress={() => scrollToIndex(index)}>
+                      <Animated.View style={styles.dot} />
+                    </TouchableOpacity>
+                  ))}
+                </View>
               </View>
-            </View>
-          )
-        }}
-      />
+            )
+          }}
+        />
+      </View>
     </SafeAreaView>
   )
 }
