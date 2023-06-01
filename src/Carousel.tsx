@@ -331,7 +331,15 @@ export const Carousel = (props: Props) => {
   const dotStyle = dotStyles ?? styles.dot
 
   return (
-    <View style={[styles.wrapper, { opacity: !currentContainerWidth ? 0 : 1 }]}>
+    <View
+      style={[
+        styles.wrapper,
+        {
+          opacity: !currentContainerWidth ? 0 : 1,
+          width: currentContainerWidth,
+        },
+      ]}
+    >
       <View>
         <ScrollView
           onLayout={(e) => {
