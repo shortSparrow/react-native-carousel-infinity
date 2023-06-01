@@ -3,7 +3,11 @@ import { SLIDE_ANIMATION_TYPE } from '../../hooks/useScrollSlideInterpolatedStyl
 export const getSlideAnimatedStyle = (
   hiddenIndexScrolling: undefined | number,
   i: number,
-  interpolate: (slideItemIndex: number, minValue: number, maxValue: number) => any,
+  interpolate: (
+    slideItemIndex: number,
+    minValue: number | string,
+    maxValue: number | string
+  ) => any,
   type: SLIDE_ANIMATION_TYPE
 ) => {
   switch (type) {

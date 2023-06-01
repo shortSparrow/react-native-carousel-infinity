@@ -30,7 +30,7 @@ export const useScrollDotsInterpolatedStyles = ({
   customDotsAnimation,
   isInfinity = true,
 }: UseScrollDotsInterpolatedStyles) => {
-  const animatedDotsStyles = Array<any>(slidesCount)
+  const animatedDotsStyles = Array(slidesCount)
 
   const interpolate = isInfinity
     ? getDotsInfinityInterpolator(scrollEvent, slideWidthWithOffset, slidesCount, fakeImagePerSide)

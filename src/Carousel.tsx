@@ -9,11 +9,6 @@ import {
   Platform,
   TouchableOpacity,
   NativeSyntheticEvent,
-  ImageSourcePropType,
-  ScrollViewProps,
-  ViewStyle,
-  ImageStyle,
-  ImageProps,
 } from 'react-native'
 import debounce from 'lodash.debounce'
 import {
@@ -26,49 +21,13 @@ import {
 } from './hooks/useScrollSlideInterpolatedStyles'
 import { generateFakeItems } from './utils/generateFakeItems'
 import { styles } from './Carousel.style'
+import type { CarouselRef, Props } from './Carousel.types'
 
 const DEFAULT_SLIDE_WIDTH = Dimensions.get('window').width
 const DEFAULT_FAKE_PER_SIDE = 2
 const DEFAULT_SLIDE_INTERVAL = 4000
 const DEFAULT_SLIDE_INTERACTION_DELAY = 1000
 const DEFAULT_ANIMATION_DURATION = 500
-
-export type SlideItem = { id: string; image: ImageSourcePropType }
-
-type Props = ScrollViewProps & {
-  images: SlideItem[]
-  fakeImagePerSide: number
-  slideWidth?: number
-  isAutoScroll?: boolean
-  autoScrollSlideInterval?: number
-  autoScrollSlideInteractionDelay?: number
-  slideHorizontalOffset?: number
-  slideAnimationType?: SLIDE_ANIMATION_TYPE
-  animationDuration?: number
-  slideAlign?: 'center' | 'left' | number
-  containerWidth?: number
-  dotsAnimationType?: DOTS_ANIMATION_TYPE
-  scrollViewRef?: React.RefObject<ScrollView>
-  customSlideAnimation?: (
-    hiddenIndexScrolling: undefined | number,
-    i: number,
-    interpolate: (slideItemIndex: number, minValue: number, maxValue: number) => any
-  ) => any
-  customDotsAnimation?: (
-    i: number,
-    interpolate: (slideItemIndex: number, minValue: number, maxValue: number) => any
-  ) => any
-  customDots?: (dotsStyles: any[], scrollToIndex: (index: number) => void) => JSX.Element
-  customSlides?: (slideStyles: any[], scrollToIndex: (index: number) => void) => JSX.Element
-  getScrollViewRef?: (ref: React.RefObject<ScrollView>) => void
-  slideStyles?: Omit<ViewStyle, 'width'>
-  imageStyles?: ImageStyle
-  imageProps?: Omit<ImageProps, 'source'>
-  dotsContainerStyles?: ViewStyle
-  dotStyles?: ViewStyle
-  getScrollAnimation?: (scrollingAnimation: React.MutableRefObject<Animated.Value>) => void
-  isInfinity?: boolean
-}
 
 export const Carousel = (props: Props) => {
   const {
@@ -97,7 +56,7 @@ export const Carousel = (props: Props) => {
     imageProps = {},
     dotsContainerStyles,
     dotStyles,
-    getScrollAnimation,
+    getCarouselRef,
     isInfinity = true,
     customSlides,
 
@@ -115,11 +74,13 @@ export const Carousel = (props: Props) => {
   // scrollViewOffset needed for adding custom smooth scroll with animation
   const scrollViewOffset = useRef(new Animated.Value(initialOffset)).current
 
-  const intervalId = useRef<number | null>(null)
-  const intervalDelayId = useRef<number | null>(null)
+  const intervalId = useRef<NodeJS.Timeout | null>(null)
+  const intervalDelayId = useRef<NodeJS.Timeout | null>(null)
   const isScrolling = useRef(false)
   const isDrag = useRef<boolean>(false)
   const ref = useRef<ScrollView>(null)
+  const carouselRef = useRef<CarouselRef | null>(null)
+
   // help to avoid style blinking when go from fake items to real
   const [hiddenIndexScrolling, setHiddenIndexScrolling] = useState<undefined | number>(undefined)
 
@@ -128,10 +89,6 @@ export const Carousel = (props: Props) => {
   useLayoutEffect(() => {
     getScrollViewRef && getScrollViewRef(ref)
   }, [ref, getScrollViewRef])
-
-  useLayoutEffect(() => {
-    getScrollAnimation && getScrollAnimation(scrolling)
-  }, [getScrollAnimation])
 
   const { animatedDotsStyles } = useScrollDotsInterpolatedStyles({
     slidesCount: images.length,
@@ -300,6 +257,15 @@ export const Carousel = (props: Props) => {
     onScroll && onScroll(e)
   }
 
+  carouselRef.current = {
+    stopAutoPlay,
+    tryStartAutoPlay,
+    scrollToIndex,
+  }
+  useEffect(() => {
+    getCarouselRef && carouselRef.current && getCarouselRef(carouselRef.current)
+  }, [getCarouselRef])
+
   // smooth scrollig by tap on index, and autoscroll
   useEffect(() => {
     scrollViewOffset.addListener(({ value }) => {
@@ -373,14 +339,14 @@ export const Carousel = (props: Props) => {
           onScroll={_onScroll}
           contentContainerStyle={{
             paddingHorizontal: horizontalMargin,
-            // paddingTop: slideAnimationType === SLIDE_ANIMATION_TYPE.MOVE_UP ? 25 : 0,
-            paddingTop: 100,
-            paddingBottom: 100,
+            paddingTop: slideAnimationType === SLIDE_ANIMATION_TYPE.MOVE_UP ? 25 : 0,
+            // paddingTop: 100,
+            // paddingBottom: 100,
           }}
           {...rest}
         >
           {customSlides
-            ? customSlides(animatedImageStyles, scrollToIndex)
+            ? customSlides(animatedImageStyles)
             : animatedImageStyles.map(({ style, image }) => (
                 <Animated.View
                   style={[
@@ -399,7 +365,7 @@ export const Carousel = (props: Props) => {
         </ScrollView>
       </View>
       {customDots ? (
-        customDots(animatedDotsStyles, scrollToIndex)
+        customDots(animatedDotsStyles)
       ) : (
         <View style={dotsContainerStyle}>
           {animatedDotsStyles.map((animatedDotStyle, index) => (

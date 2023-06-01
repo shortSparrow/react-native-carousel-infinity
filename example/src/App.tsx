@@ -1,7 +1,9 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import {
   Animated,
   Image,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   Pressable,
   SafeAreaView,
   StyleSheet,
@@ -10,6 +12,7 @@ import {
 } from 'react-native'
 import {
   Carousel,
+  CarouselRef,
   DOTS_ANIMATION_TYPE,
   SLIDE_ANIMATION_TYPE,
   SlideItem,
@@ -40,7 +43,7 @@ const initialList: SlideItem[] = [
 
 // const CONTAINER_WIDTH = Dimensions.get('window').width - 100
 const CONTAINER_WIDTH = 350
-const SLIDE_WIDTH = 280
+const SLIDE_WIDTH = 300
 const SLIDE_HORIZONTAL_OFFSET = 10
 const FAKE_PER_SIDE = 8
 
@@ -51,8 +54,8 @@ const DOR_HORIZONTAL_MARGIN = 10
 const DOT_FULL_WIDTH = DOT_WIDTH + DOR_HORIZONTAL_MARGIN * 2
 
 export default function App() {
-  const scrolling = useRef(new Animated.Value(0))
   const myAnim = useRef(new Animated.Value(0)).current
+  const carouselRef = useRef<CarouselRef | null>(null)
 
   const interpolationInputRange = {
     LEFT_EDGE: (FAKE_PER_SIDE - 0.5) * FULL_SLIDE_WIDTH,
@@ -73,25 +76,161 @@ export default function App() {
       DOR_HORIZONTAL_MARGIN,
   }
 
-  useEffect(() => {
-    scrolling.current.addListener(({ value }) => {
-      if (value <= interpolationInputRange.LEFT_EDGE) {
-        // if green dots go over left edge move one to right edge
-        myAnim.setValue(initialList.length * FULL_SLIDE_WIDTH + value)
-      } else if (value >= interpolationInputRange.RIGHT_EDGE) {
-        // if green dots move over right edge move one to left edge
-        const realSlidesWidth = initialList.length * FULL_SLIDE_WIDTH
-        myAnim.setValue(value - realSlidesWidth)
-      } else {
-        myAnim.setValue(value)
-      }
-    })
-  }, [interpolationInputRange.LEFT_EDGE, interpolationInputRange.RIGHT_EDGE, myAnim])
+  const _onScroll = ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const value = nativeEvent.contentOffset.x
+
+    if (value <= interpolationInputRange.LEFT_EDGE) {
+      // if green dots go over left edge move one to right edge
+      myAnim.setValue(initialList.length * FULL_SLIDE_WIDTH + value)
+    } else if (value >= interpolationInputRange.RIGHT_EDGE) {
+      // if green dots move over right edge move one to left edge
+      const realSlidesWidth = initialList.length * FULL_SLIDE_WIDTH
+      myAnim.setValue(value - realSlidesWidth)
+    } else {
+      myAnim.setValue(value)
+    }
+  }
+
+  const renderCustomDots = (dots: any[]) => {
+    return (
+      <View style={styles.dotsContainer}>
+        <View style={styles.dotsWrapper}>
+          <Animated.View
+            style={[
+              styles.dot,
+              styles.movableDot,
+              {
+                transform: [
+                  {
+                    translateX: myAnim.interpolate({
+                      inputRange: [
+                        interpolationInputRange.LEFT_EDGE,
+                        interpolationInputRange.BUTTON_START,
+                        interpolationInputRange.BUTTON_END,
+                        interpolationInputRange.RIGHT_EDGE,
+                      ],
+                      outputRange: [
+                        interpolationOutputRange.LEFT_EDGE,
+                        interpolationOutputRange.BUTTON_START,
+                        interpolationOutputRange.BUTTON_END,
+                        interpolationOutputRange.RIGHT_EDGE,
+                      ],
+                      extrapolate: 'clamp',
+                    }),
+                  },
+                ],
+              },
+            ]}
+          />
+          {dots.map((_, index) => (
+            <TouchableOpacity key={index} onPress={() => carouselRef.current?.scrollToIndex(index)}>
+              <Animated.View style={styles.dot} />
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+    )
+  }
+
+  const customSlidesAnimation = (
+    hiddenIndexScrolling: undefined | number,
+    i: number,
+    interpolate: (
+      slideItemIndex: number,
+      minValue: number | string,
+      maxValue: number | string
+    ) => any
+  ) => {
+    const OFFSET = SLIDE_WIDTH + SLIDE_HORIZONTAL_OFFSET * 2
+    return {
+      transform: [
+        {
+          // translateY: interpolate(i, 0, 30),
+          translateY: myAnim.interpolate({
+            inputRange: [(i - 1) * OFFSET, i * OFFSET, (i + 1) * OFFSET],
+            outputRange: [30, 0, 30],
+            extrapolate: 'clamp',
+          }),
+        },
+      ],
+      // transform: [
+      //   {
+      //     scale: interpolate(i, 1, 1.2),
+      //   },
+      //   {
+      //     translateY: myAnim.interpolate({
+      //       inputRange: [
+      //         // (i - 4) * OFFSET,
+      //         (i - 3) * OFFSET,
+      //         (i - 2) * OFFSET,
+      //         (i - 1) * OFFSET,
+      //         i * OFFSET,
+      //         (i + 1) * OFFSET,
+      //         (i + 2) * OFFSET,
+      //         (i + 3) * OFFSET,
+      //         // (i + 4) * OFFSET,
+      //       ],
+      //       outputRange: [150, 90, 30, 0, 30, 90, 150],
+      //       extrapolate: 'clamp',
+      //     }),
+      //   },
+      //   {
+      //     translateX: myAnim.interpolate({
+      //       inputRange: [
+      //         // (i - 4) * OFFSET,
+      //         (i - 3) * OFFSET,
+      //         (i - 2) * OFFSET,
+      //         (i - 1) * OFFSET,
+      //         i * OFFSET,
+      //         (i + 1) * OFFSET,
+      //         (i + 2) * OFFSET,
+      //         (i + 3) * OFFSET,
+      //         // (i + 4) * OFFSET,
+      //       ],
+      //       outputRange: [-30, -20, 0, 0, 0, 20, 30],
+      //       extrapolate: 'clamp',
+      //     }),
+      //   },
+      // ],
+    }
+  }
+  const renderCustomSlides = (slides: any[]) => {
+    return (
+      <>
+        {slides.map(({ style, image }, i) => (
+          <Pressable onPress={() => carouselRef.current?.scrollToIndex(i)}>
+            <Animated.View
+              style={[
+                // slideStyle,
+                {
+                  height: SLIDE_WIDTH,
+                  width: SLIDE_WIDTH,
+                  marginHorizontal: SLIDE_HORIZONTAL_OFFSET,
+                },
+                style,
+              ]}
+              key={image.id}
+            >
+              <Image
+                source={image.image}
+                style={{ width: '100%', height: '100%', borderRadius: SLIDE_WIDTH }}
+                resizeMode='cover'
+              />
+            </Animated.View>
+          </Pressable>
+        ))}
+      </>
+    )
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ backgroundColor: 'blue',  }}>
+      <View style={{ backgroundColor: 'blue' }}>
         <Carousel
+          getCarouselRef={(ref) => {
+            carouselRef.current = ref
+          }}
+          onScroll={_onScroll}
           // containerWidth={CONTAINER_WIDTH}
           isInfinity={true}
           isAutoScroll={false}
@@ -108,142 +247,16 @@ export default function App() {
             // borderRadius: SLIDE_WIDTH,
             // backgroundColor: 'white'
           }}
-          imageProps={{ resizeMode: 'cover' }}
-          // imageStyles={{
-          //   // paddingHorizontal: 10,
-          //   width: '100%',
-          //   height: '100%',
-          //   borderRadius: SLIDE_WIDTH,
-          // }}
-          // customSlides={(slideStyles, scrollToIndex) => {
-          //   return (
-          //     <>
-          //       {slideStyles.map(({ style, image }, i) => (
-          //         <Pressable
-          //           onPress={() => {
-          //             console.log('i: ', i)
-          //             scrollToIndex(i)
-          //           }}
-          //         >
-          //           <Animated.View
-          //             style={[
-          //               // slideStyle,
-          //               {
-          //                 height: SLIDE_WIDTH,
-          //                 width: SLIDE_WIDTH,
-          //                 marginHorizontal: SLIDE_HORIZONTAL_OFFSET,
-          //               },
-          //               style,
-          //             ]}
-          //             key={image.id}
-          //           >
-          //             <Image
-          //               source={image.image}
-          //               style={{ width: '100%', height: '100%', borderRadius: SLIDE_WIDTH }}
-          //               resizeMode='cover'
-          //             />
-          //           </Animated.View>
-          //         </Pressable>
-          //       ))}
-          //     </>
-          //   )
-          // }}
-          // customSlideAnimation={(hiddenIndexScrolling, i, interpolate) => {
-          //   const OFFSET = SLIDE_WIDTH + SLIDE_HORIZONTAL_OFFSET * 2
-          //   return {
-          //     transform: [
-          //       {
-          //         translateY: interpolate(i, 0, 30),
-          //         // translateY: scrolling.current.interpolate({
-          //         //   inputRange: [(i - 1) * OFFSET, i * OFFSET, (i + 1) * OFFSET],
-          //         //   outputRange: [30, 0, 30],
-          //         //   extrapolate: 'clamp',
-          //         // }),
-          //       },
-          //     ],
-          //     // transform: [
-          //     //   // {
-          //     //   //   scale: interpolate(i, 1, 1.2),
-          //     //   // },
-          //     //   {
-          //     //     translateY: scrolling.current.interpolate({
-          //     //       inputRange: [
-          //     //         // (i - 4) * OFFSET,
-          //     //         (i - 3) * OFFSET,
-          //     //         (i - 2) * OFFSET,
-          //     //         (i - 1) * OFFSET,
-          //     //         i * OFFSET,
-          //     //         (i + 1) * OFFSET,
-          //     //         (i + 2) * OFFSET,
-          //     //         (i + 3) * OFFSET,
-          //     //         // (i + 4) * OFFSET,
-          //     //       ],
-          //     //       outputRange: [150, 90, 30, 0, 30, 90, 150],
-          //     //       extrapolate: 'clamp',
-          //     //     }),
-          //     //   },
-          //     //   // {
-          //     //   //   translateX: scrolling.current.interpolate({
-          //     //   //     inputRange: [
-          //     //   //       // (i - 4) * OFFSET,
-          //     //   //       (i - 3) * OFFSET,
-          //     //   //       (i - 2) * OFFSET,
-          //     //   //       (i - 1) * OFFSET,
-          //     //   //       i * OFFSET,
-          //     //   //       (i + 1) * OFFSET,
-          //     //   //       (i + 2) * OFFSET,
-          //     //   //       (i + 3) * OFFSET,
-          //     //   //       // (i + 4) * OFFSET,
-          //     //   //     ],
-          //     //   //     outputRange: [-30, -20, 0, 0, 0, 20, 30],
-          //     //   //     extrapolate: 'clamp',
-          //     //   //   }),
-          //     //   // },
-          //     // ],
-          //   }
-          // }}
-          getScrollAnimation={(scrollAnimation) => (scrolling.current = scrollAnimation.current)}
-          // eslint-disable-next-line react/no-unstable-nested-components
-          customDots={(dots, scrollToIndex) => {
-            return (
-              <View style={styles.dotsContainer}>
-                <View style={styles.dotsWrapper}>
-                  <Animated.View
-                    style={[
-                      styles.dot,
-                      styles.movableDot,
-                      {
-                        transform: [
-                          {
-                            translateX: myAnim.interpolate({
-                              inputRange: [
-                                interpolationInputRange.LEFT_EDGE,
-                                interpolationInputRange.BUTTON_START,
-                                interpolationInputRange.BUTTON_END,
-                                interpolationInputRange.RIGHT_EDGE,
-                              ],
-                              outputRange: [
-                                interpolationOutputRange.LEFT_EDGE,
-                                interpolationOutputRange.BUTTON_START,
-                                interpolationOutputRange.BUTTON_END,
-                                interpolationOutputRange.RIGHT_EDGE,
-                              ],
-                              extrapolate: 'clamp',
-                            }),
-                          },
-                        ],
-                      },
-                    ]}
-                  />
-                  {dots.map((_, index) => (
-                    <TouchableOpacity key={index} onPress={() => scrollToIndex(index)}>
-                      <Animated.View style={styles.dot} />
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-            )
+          // imageProps={{ resizeMode: 'contain' }}
+
+          imageStyles={{
+            width: '100%',
+            height: '100%',
+            borderRadius: SLIDE_WIDTH,
           }}
+          // customSlides={renderCustomSlides}
+          // customSlideAnimation={customSlidesAnimation}
+          // customDots={renderCustomDots}
         />
       </View>
     </SafeAreaView>
