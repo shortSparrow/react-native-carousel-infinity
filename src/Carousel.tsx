@@ -179,7 +179,7 @@ export const Carousel = (props: Props) => {
           Animated.timing(scrollViewOffset, {
             toValue: offset,
             duration: animationDuration,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }).start()
         }, autoScrollSlideInterval)
       }, delay)
@@ -205,7 +205,7 @@ export const Carousel = (props: Props) => {
     Animated.timing(scrollViewOffset, {
       toValue: slideWidth * toIndex + toIndex * fullSlideHorizontalOffset,
       duration: animationDuration,
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start()
 
     tryStartAutoPlay(autoScrollSlideInteractionDelay)
