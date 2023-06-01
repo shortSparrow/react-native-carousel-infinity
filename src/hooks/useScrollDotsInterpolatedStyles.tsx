@@ -1,6 +1,7 @@
 import type { Animated } from 'react-native'
-import { getDotsInterpolator } from '../utils/dots/getDotsInterpolator'
+import { getDotsInfinityInterpolator } from '../utils/dots/getDotsInfinityInterpolator'
 import { getDotsAnimatedStyle } from '../utils/dots/getDotsAnimatedStyle'
+import { getDotsInterpolator } from '../utils/dots/getDotsInterpolator'
 
 export enum DOTS_ANIMATION_TYPE {
   SCALE_WITH_OPACITY,
@@ -18,6 +19,7 @@ type UseScrollDotsInterpolatedStyles = {
     i: number,
     interpolate: (slideItemIndex: number, minValue: number, maxValue: number) => any
   ) => any
+  isInfinity?: boolean
 }
 export const useScrollDotsInterpolatedStyles = ({
   slidesCount,
@@ -26,15 +28,13 @@ export const useScrollDotsInterpolatedStyles = ({
   fakeImagePerSide,
   dotsAnimationType = DOTS_ANIMATION_TYPE.SCALE_WITH_OPACITY,
   customDotsAnimation,
+  isInfinity = true,
 }: UseScrollDotsInterpolatedStyles) => {
   const animatedDotsStyles = Array<any>(slidesCount)
 
-  const interpolate = getDotsInterpolator(
-    scrollEvent,
-    slideWidthWithOffset,
-    slidesCount,
-    fakeImagePerSide
-  )
+  const interpolate = isInfinity
+    ? getDotsInfinityInterpolator(scrollEvent, slideWidthWithOffset, slidesCount, fakeImagePerSide)
+    : getDotsInterpolator(scrollEvent, slideWidthWithOffset)
 
   for (let i = fakeImagePerSide; i < slidesCount + fakeImagePerSide; i += 1) {
     animatedDotsStyles[i] = {

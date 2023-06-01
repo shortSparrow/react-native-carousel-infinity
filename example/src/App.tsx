@@ -1,5 +1,13 @@
 import React, { useEffect, useRef } from 'react'
-import { Animated, SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import {
+  Animated,
+  Image,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import {
   Carousel,
   DOTS_ANIMATION_TYPE,
@@ -18,13 +26,23 @@ const initialList: SlideItem[] = [
       uri: 'https://upload.wikimedia.org/wikipedia/commons/d/d4/IAA_2022_20_travelarz.jpg',
     },
   },
+  // { id: '6', image: require('./image/1.jpeg') },
+  // { id: '7', image: require('./image/2.webp') },
+  // { id: '8', image: require('./image/3.jpeg') },
+  // { id: '9', image: require('./image/4.jpeg') },
+  // {
+  //   id: '10',
+  //   image: {
+  //     uri: 'https://upload.wikimedia.org/wikipedia/commons/d/d4/IAA_2022_20_travelarz.jpg',
+  //   },
+  // },
 ]
 
 // const CONTAINER_WIDTH = Dimensions.get('window').width - 100
-const CONTAINER_WIDTH = 300
-const SLIDE_WIDTH = 150
+const CONTAINER_WIDTH = 350
+const SLIDE_WIDTH = 280
 const SLIDE_HORIZONTAL_OFFSET = 10
-const FAKE_PER_SIDE = 3
+const FAKE_PER_SIDE = 8
 
 const FULL_SLIDE_WIDTH = SLIDE_WIDTH + SLIDE_HORIZONTAL_OFFSET * 2
 
@@ -72,19 +90,118 @@ export default function App() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ backgroundColor: 'blue' }}>
+      <View style={{ backgroundColor: 'blue',  }}>
         <Carousel
           // containerWidth={CONTAINER_WIDTH}
+          isInfinity={true}
           isAutoScroll={false}
           fakeImagePerSide={FAKE_PER_SIDE}
           images={initialList}
           slideHorizontalOffset={SLIDE_HORIZONTAL_OFFSET}
           slideWidth={SLIDE_WIDTH}
-          slideAlign='center'
-          slideAnimationType={SLIDE_ANIMATION_TYPE.NO_EFFECTS}
+          // slideAlign={'center'}
+          slideAnimationType={SLIDE_ANIMATION_TYPE.MOVE_UP}
           dotsAnimationType={DOTS_ANIMATION_TYPE.SCALE}
-          slideStyles={styles.slide}
+          slideStyles={{
+            height: SLIDE_WIDTH,
+            // paddingHorizontal: 10,
+            // borderRadius: SLIDE_WIDTH,
+            // backgroundColor: 'white'
+          }}
           imageProps={{ resizeMode: 'cover' }}
+          // imageStyles={{
+          //   // paddingHorizontal: 10,
+          //   width: '100%',
+          //   height: '100%',
+          //   borderRadius: SLIDE_WIDTH,
+          // }}
+          // customSlides={(slideStyles, scrollToIndex) => {
+          //   return (
+          //     <>
+          //       {slideStyles.map(({ style, image }, i) => (
+          //         <Pressable
+          //           onPress={() => {
+          //             console.log('i: ', i)
+          //             scrollToIndex(i)
+          //           }}
+          //         >
+          //           <Animated.View
+          //             style={[
+          //               // slideStyle,
+          //               {
+          //                 height: SLIDE_WIDTH,
+          //                 width: SLIDE_WIDTH,
+          //                 marginHorizontal: SLIDE_HORIZONTAL_OFFSET,
+          //               },
+          //               style,
+          //             ]}
+          //             key={image.id}
+          //           >
+          //             <Image
+          //               source={image.image}
+          //               style={{ width: '100%', height: '100%', borderRadius: SLIDE_WIDTH }}
+          //               resizeMode='cover'
+          //             />
+          //           </Animated.View>
+          //         </Pressable>
+          //       ))}
+          //     </>
+          //   )
+          // }}
+          // customSlideAnimation={(hiddenIndexScrolling, i, interpolate) => {
+          //   const OFFSET = SLIDE_WIDTH + SLIDE_HORIZONTAL_OFFSET * 2
+          //   return {
+          //     transform: [
+          //       {
+          //         translateY: interpolate(i, 0, 30),
+          //         // translateY: scrolling.current.interpolate({
+          //         //   inputRange: [(i - 1) * OFFSET, i * OFFSET, (i + 1) * OFFSET],
+          //         //   outputRange: [30, 0, 30],
+          //         //   extrapolate: 'clamp',
+          //         // }),
+          //       },
+          //     ],
+          //     // transform: [
+          //     //   // {
+          //     //   //   scale: interpolate(i, 1, 1.2),
+          //     //   // },
+          //     //   {
+          //     //     translateY: scrolling.current.interpolate({
+          //     //       inputRange: [
+          //     //         // (i - 4) * OFFSET,
+          //     //         (i - 3) * OFFSET,
+          //     //         (i - 2) * OFFSET,
+          //     //         (i - 1) * OFFSET,
+          //     //         i * OFFSET,
+          //     //         (i + 1) * OFFSET,
+          //     //         (i + 2) * OFFSET,
+          //     //         (i + 3) * OFFSET,
+          //     //         // (i + 4) * OFFSET,
+          //     //       ],
+          //     //       outputRange: [150, 90, 30, 0, 30, 90, 150],
+          //     //       extrapolate: 'clamp',
+          //     //     }),
+          //     //   },
+          //     //   // {
+          //     //   //   translateX: scrolling.current.interpolate({
+          //     //   //     inputRange: [
+          //     //   //       // (i - 4) * OFFSET,
+          //     //   //       (i - 3) * OFFSET,
+          //     //   //       (i - 2) * OFFSET,
+          //     //   //       (i - 1) * OFFSET,
+          //     //   //       i * OFFSET,
+          //     //   //       (i + 1) * OFFSET,
+          //     //   //       (i + 2) * OFFSET,
+          //     //   //       (i + 3) * OFFSET,
+          //     //   //       // (i + 4) * OFFSET,
+          //     //   //     ],
+          //     //   //     outputRange: [-30, -20, 0, 0, 0, 20, 30],
+          //     //   //     extrapolate: 'clamp',
+          //     //   //   }),
+          //     //   // },
+          //     // ],
+          //   }
+          // }}
           getScrollAnimation={(scrollAnimation) => (scrolling.current = scrollAnimation.current)}
           // eslint-disable-next-line react/no-unstable-nested-components
           customDots={(dots, scrollToIndex) => {
