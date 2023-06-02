@@ -38,7 +38,7 @@ export const Carousel = (props: Props) => {
     autoScrollSlideInterval = DEFAULT_SLIDE_INTERVAL,
     autoScrollSlideInteractionDelay = DEFAULT_SLIDE_INTERACTION_DELAY,
     images,
-    slideAnimationType,
+    slideAnimationType = SLIDE_ANIMATION_TYPE.MOVE_UP,
     customSlideAnimation,
     customDotsAnimation,
     animationDuration = DEFAULT_ANIMATION_DURATION,

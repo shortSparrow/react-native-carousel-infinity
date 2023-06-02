@@ -10,7 +10,6 @@ import {
 import {
   Carousel,
   CarouselRef,
-  DOTS_ANIMATION_TYPE,
   SLIDE_ANIMATION_TYPE,
   SlideItem,
 } from 'react-native-carousel-infinity'
@@ -133,7 +132,6 @@ export const DotsAdvancedAnimation = () => {
         slideWidth={SLIDE_WIDTH}
         slideAlign={'center'}
         slideAnimationType={SLIDE_ANIMATION_TYPE.NO_EFFECTS}
-        dotsAnimationType={DOTS_ANIMATION_TYPE.SCALE}
         slideStyles={{
           height: SLIDE_WIDTH,
         }}
