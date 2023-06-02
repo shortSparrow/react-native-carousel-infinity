@@ -32,7 +32,6 @@ const DEFAULT_ANIMATION_DURATION = 500
 
 export const Carousel = (props: Props) => {
   const {
-    fakeImagePerSide = props.isInfinity ? DEFAULT_FAKE_PER_SIDE : 0,
     slideWidth = DEFAULT_SLIDE_WIDTH,
     slideHorizontalOffset = 10,
     isAutoScroll = false,
@@ -43,7 +42,7 @@ export const Carousel = (props: Props) => {
     customSlideAnimation,
     customDotsAnimation,
     animationDuration = DEFAULT_ANIMATION_DURATION,
-    slideAlign = 'center',
+    slideAlign = 'left',
     containerWidth,
     dotsAnimationType = DOTS_ANIMATION_TYPE.SCALE_WITH_OPACITY,
     onScroll,
@@ -66,6 +65,7 @@ export const Carousel = (props: Props) => {
     ...rest
   } = props
 
+  const fakeImagePerSide = isInfinity ? DEFAULT_FAKE_PER_SIDE : 0
   const [currentContainerWidth, setCurrentContainerWidth] = useState(containerWidth)
   const fullSlideHorizontalOffset = slideHorizontalOffset * 2
   const initialOffset = isInfinity
