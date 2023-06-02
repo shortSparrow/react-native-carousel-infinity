@@ -52,6 +52,7 @@ export type Props = ScrollViewProps & {
   getCarouselRef?: (ref: CarouselRef) => void
   isInfinity?: boolean
   startFromIndex?: number
+  onSelectSlide?: (index: number) => void
 }
 
 export type CarouselRef = {

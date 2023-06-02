@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import {
   View,
@@ -60,6 +61,7 @@ export const Carousel = (props: Props) => {
     isInfinity = true,
     customSlides,
     startFromIndex = 0,
+    onSelectSlide,
 
     ...rest
   } = props
@@ -82,6 +84,7 @@ export const Carousel = (props: Props) => {
   const isDrag = useRef<boolean>(false)
   const ref = useRef<ScrollView>(null)
   const carouselRef = useRef<CarouselRef | null>(null)
+  const _currentIndex = useRef<number>(startFromIndex)
 
   // help to avoid style blinking when go from fake items to real
   const [hiddenIndexScrolling, setHiddenIndexScrolling] = useState<undefined | number>(undefined)
@@ -132,6 +135,12 @@ export const Carousel = (props: Props) => {
       (slideWidth + fullSlideHorizontalOffset) * fakeImagePerSide +
       slideHorizontalOffset
     const index = Math.round(x / (slideWidth + fullSlideHorizontalOffset))
+
+    const indexOfFakeSlide = index < 0 || index > images.length - 1
+    if (!indexOfFakeSlide && _currentIndex.current !== index && onSelectSlide) {
+      onSelectSlide(index)
+      _currentIndex.current = index
+    }
 
     // scroll to start
     if (index > images.length - 1) {
@@ -341,11 +350,14 @@ export const Carousel = (props: Props) => {
           onScrollEndDrag={_onScrollEndDrag}
           onMomentumScrollEnd={_onMomentumScrollEnd}
           onScroll={_onScroll}
-          contentContainerStyle={{
-            paddingHorizontal: horizontalMargin,
-            paddingTop: slideAnimationType === SLIDE_ANIMATION_TYPE.MOVE_UP ? 25 : 0,
-          }}
           {...rest}
+          contentContainerStyle={[
+            {
+              paddingHorizontal: horizontalMargin,
+              paddingTop: slideAnimationType === SLIDE_ANIMATION_TYPE.MOVE_UP ? 25 : 0,
+            },
+            rest.contentContainerStyle ? rest.contentContainerStyle : {},
+          ]}
         >
           {customSlides
             ? customSlides(animatedImageStyles)

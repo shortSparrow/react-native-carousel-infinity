@@ -51,7 +51,7 @@ export const CustomSlides = () => {
   }
 
   const customSlidesAnimation = (
-    hiddenIndexScrolling: undefined | number,
+    _hiddenIndexScrolling: undefined | number,
     i: number,
     interpolate: (
       slideItemIndex: number,
@@ -122,6 +122,7 @@ export const CustomSlides = () => {
       slideWidth={SLIDE_WIDTH}
       slideAnimationType={SLIDE_ANIMATION_TYPE.NO_EFFECTS}
       dotsAnimationType={DOTS_ANIMATION_TYPE.SCALE_WITH_OPACITY}
+      // eslint-disable-next-line react-native/no-inline-styles
       contentContainerStyle={{
         paddingVertical: 100,
         paddingHorizontal:

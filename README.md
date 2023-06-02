@@ -61,39 +61,42 @@ export const SimpleCarousel = () => {
 
 ## Props
 
-any ScrollView props +
-| name | required | default | types | descriptions |
+**Accepts all ScrollView props and these:**
+| name                              | required | default                            | types                                      | descriptions |
 |:----------------------------------|:---------|:---------------------------------- |:-------------------------------------------|:-------------|
-| images | ✅ | | { id: string; image: ImageSourcePropType } | Images for carousel, you can add local images and form url as well |
-| fakeImagePerSide | ❌ | 3 | number | Count of fake items per each side |
-| slideWidth | ❌ | Dimensions.get('window').width | number | Slide width |
-| isAutoScroll | ❌ | false | boolean | Should images auto scrolling or not |
-| autoScrollSlideInterval | ❌ | 4000 | number | Time between each autoscroll new slide |
-| autoScrollSlideInteractionDelay | ❌ | 1000 | number | If you interrupt auto scrolling or just scroll by fingers autoscroll waiting autoScrollSlideInteractionDelay + autoScrollSlideInterval until start next auto scrolling |
-| slideHorizontalOffset | ❌ | 10 | number | Offset between each slide |
-| slideAnimationType | ❌ | MOVE_UP | {MOVE_UP,SCALE,ROLLING,SQUEEZE_ANDROID, SQUEEZE_MOVE_UP_IOS,NO_EFFECTS} | Already implemented animations for slides |
-| animationDuration | ❌ | 500 | number | Sliding duration during autoscroll or pressing pagination buttons |
-| slideAlign | ❌ | center | string | **\***ADD DESCRIPTION**\*** |
-| containerWidth | ❌ | | number | This parameter not setting carousel width, it just says parent width. This parameter improves performance. Without one carousel make 1 rerender to defined own width |
-| dotsAnimationType | ❌ | SCALE_WITH_OPACITY | {SCALE_WITH_OPACITY,SCALE,MOVE_UP} | Already implemented animations for dots |
-| startFromIndex | ❌ | 0 | number | Sets index of first visible slide |
-| isInfinity | ❌ | true | boolean | Define should carousel be infinity or not |
-| dotStyles | ❌ | undefined | ViewStyle | Your custom styles for dots |
-| dotsContainerStyles | ❌ | undefined | ViewStyle | Your custom styles for dots container |
-| imageProps | ❌ | {} | Omit<ImageProps, 'source'> | Image props for slide images, like resizeMode, etc... |
-| imageStyles | ❌ | undefined | ImageStyle | Your custom styles for slide images |
-| slideStyles | ❌ | undefined | Omit<ViewStyle, 'width'> | Your custom styles for slides |
-| customSlides | ❌ | undefined | (slideStyles: any[]) => JSX.Element | Replace developed slides by your own implementation |
-| customSlideAnimation | ❌ | undefined | customSlideAnimation?: (hiddenIndexScrolling: undefined \| number,i: number,interpolate: (slideItemIndex: number,minValue: number \| string,maxValue: number \| string) => any) => any | Custom animations fro slides |
-| customDots | ❌ | undefined | (dotsStyles: any[]) => JSX.Element | Replace developed dots pagination by your own implementation |
-| customDotsAnimation | ❌ | undefined | customDotsAnimation?: (i: number,interpolate: (slideItemIndex: number,minValue: number \| string,maxValue: number \| string) => any) => any | Custom animations fro slides |
+| images                            | ✅       |                                    | { id: string; image: ImageSourcePropType }  | Images for carousel, you can add local images and form url as well   |
+| fakeImagePerSide                  | ❌       |  3                                 |    number                                   | Count of fake items per each side |
+| slideWidth                        | ❌       |  Dimensions.get('window').width    |    number                                   | Slide width |
+| isAutoScroll                      | ❌       |  false                             |    boolean                                  | Should images auto scrolling or not |
+| autoScrollSlideInterval           | ❌       |  4000                              |    number                                   | Time between each autoscroll new slide |
+| autoScrollSlideInteractionDelay   | ❌       |  1000                              |    number                                   | If you interrupt auto scrolling or just scroll by fingers autoscroll waiting autoScrollSlideInteractionDelay + autoScrollSlideInterval until start next auto scrolling |
+| slideHorizontalOffset             | ❌       |  10                                |    number                                   | Offset between each slide |
+| slideAnimationType                | ❌       |  NEED YO ADD                       |    {MOVE_UP,SCALE,ROLLING,SQUEEZE_ANDROID, SQUEEZE_MOVE_UP_IOS,NO_EFFECTS}                                   | Already implemented animations for slides |
+| animationDuration                 | ❌       |  500                               |    number                                   | Sliding duration during autoscroll or pressing pagination buttons |
+| slideAlign                        | ❌       |  center                            |    'center' \| 'left' \| number             | ```left``` - all you slides start from left edge (typically for scrollView). <br>```center``` - slides looks symmetric, because adds number depends on device size. <br>```number``` - add any number for specific cases when you need to align your slides (like [here](/example/src/CustomSlides.tsx)).
+ But here insted of slide align uses ```paddingHorizontal``` for ```contentContainerStyle```). If you add ```contentContainerStyle``` ```slideAlign``` will not works so instead of it just add ```paddingHorizontal``` to ```contentContainerStyle``` |
+| onSelectSlide                     | ❌       |  undefined                         |    (index: number) => void                  | Calls on select slide, useful for getting current selected index |
+| containerWidth                    | ❌       |                                    |    number                                   | This parameter not setting carousel width, it just says parent width. This parameter improves performance. Without one carousel make 1 rerender to defined own width  |
+| dotsAnimationType                 | ❌       |  SCALE_WITH_OPACITY                |    {SCALE_WITH_OPACITY,SCALE,MOVE_UP}       | Already implemented animations for dots  |
+| startFromIndex                    | ❌       |  0                                 |    number                                   | Sets index of first visible slide |
+| isInfinity                        | ❌       |  true                              |    boolean                                  | Define should carousel be infinity or not |
+| dotStyles                         | ❌       |  undefined                         |    ViewStyle                                | Your custom styles for dots |
+| dotsContainerStyles               | ❌       |  undefined                         |    ViewStyle                                | Your custom styles for dots container |
+| imageProps                        | ❌       |  {}                                |    Omit<ImageProps, 'source'>               | Image props for slide images, like resizeMode, etc... |
+| imageStyles                       | ❌       |  undefined                         |    ImageStyle                               | Your custom styles for slide images  |
+| slideStyles                       | ❌       |  undefined                         |    Omit<ViewStyle, 'width'>                 | Your custom styles for slides  |
+| customSlides                      | ❌       |  undefined                         |   (slideStyles: any[]) => JSX.Element       | Replace developed slides by your own implementation |
+| customSlideAnimation              | ❌       |  undefined                         |    customSlideAnimation?: (hiddenIndexScrolling: undefined \| number,i: number,interpolate: (slideItemIndex: number,minValue: number \| string,maxValue: number \| string) => any) => any                                                                                                         | Custom animations fro slides |
+| customDots                        | ❌       |            undefined               |   (dotsStyles: any[]) => JSX.Element        | Replace developed dots pagination by your own implementation |
+| customDotsAnimation               | ❌       |            undefined               |   customDotsAnimation?: (i: number,interpolate: (slideItemIndex: number,minValue: number \| string,maxValue: number \| string) => any) => any | Custom animations fro slides  |
+
 
 ## Ref
 
-| name             | required | default   |                                                     types                                                      |                                                 descriptions |
-| :--------------- | :------- | :-------- | :------------------------------------------------------------------------------------------------------------: | -----------------------------------------------------------: |
-| getCarouselRef   | ❌       | undefined | (ref: {stopAutoPlay: () => void,tryStartAutoPlay: () => void, scrollToIndex: (index: number) => void}) => void | Return CarouselRef for easing handing autoplay and scrolling |
-| getScrollViewRef | ❌       | undefined |                                   (ref: React.RefObject<ScrollView>) => void                                   |                                        Return ScrollView ref |
+| name                              | required | default                            | types                | descriptions |
+|:----------------------------------|:---------|:----------- |:---------------------------------------------:| ------------:|
+| getCarouselRef                    | ❌       |  undefined  | (ref:  {stopAutoPlay: () => void,tryStartAutoPlay: () => void, scrollToIndex: (index: number) => void}) => void                                                                                                         | Return CarouselRef for easing handing autoplay and scrolling   |
+| getScrollViewRef                  | ❌       |  undefined  | (ref: React.RefObject<ScrollView>) => void  | Return ScrollView ref  |
 
 ## Props
 
@@ -113,7 +116,7 @@ You can use already implemented animations or create own. There are two way to c
 
 ```js
 import React from 'react'
-import { Carousel } from 'react-native-carousel-infinity'
+import { Carousel,  NativeScrollEvent, NativeSyntheticEvent } from 'react-native-carousel-infinity'
 
 const Component = () => {
   const myAnim = useRef(new Animated.Value(0)).current
