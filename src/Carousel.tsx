@@ -9,6 +9,7 @@ import {
   Platform,
   TouchableOpacity,
   NativeSyntheticEvent,
+  LayoutChangeEvent,
 } from 'react-native'
 import debounce from 'lodash.debounce'
 import {
@@ -92,6 +93,12 @@ export const Carousel = (props: Props) => {
   useLayoutEffect(() => {
     getScrollViewRef && getScrollViewRef(ref)
   }, [ref, getScrollViewRef])
+
+  const calculateContainerWidth = debounce((width: number) => {
+    if (currentContainerWidth !== width) {
+      setCurrentContainerWidth(width)
+    }
+  }, 10)
 
   const { animatedDotsStyles } = useScrollDotsInterpolatedStyles({
     slidesCount: images.length,
@@ -307,6 +314,7 @@ export const Carousel = (props: Props) => {
   const dotsContainerStyle = dotsContainerStyles ?? styles.dotsContainer
   const dotStyle = dotStyles ?? styles.dot
 
+  console.log('UPDATE: ', )
   return (
     <View
       style={[
@@ -318,11 +326,7 @@ export const Carousel = (props: Props) => {
     >
       <View>
         <ScrollView
-          onLayout={(e) => {
-            if (currentContainerWidth !== e.nativeEvent.layout.width) {
-              setCurrentContainerWidth(e.nativeEvent.layout.width)
-            }
-          }}
+          onLayout={(e) => calculateContainerWidth(e.nativeEvent.layout.width)}
           bounces={false}
           contentOffset={{
             x: initialOffset,

@@ -5,7 +5,6 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   Pressable,
-  SafeAreaView,
   StyleSheet,
   View,
   useWindowDimensions,
@@ -17,7 +16,7 @@ import {
   SLIDE_ANIMATION_TYPE,
   SlideItem,
 } from 'react-native-carousel-infinity'
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const initialList: SlideItem[] = [
   { id: '1', image: require('./image/1.jpeg') },
@@ -40,7 +39,7 @@ const initialList: SlideItem[] = [
 const SLIDE_WIDTH = 100
 const SLIDE_HORIZONTAL_OFFSET = 10
 
-function DDD() {
+export const CustomSlides = () => {
   const insets = useSafeAreaInsets()
 
   const myAnim = useRef(new Animated.Value(0)).current
@@ -111,12 +110,13 @@ function DDD() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View>
         <Carousel
           getCarouselRef={(ref) => {
             carouselRef.current = ref
           }}
+          startFromIndex={2}
           onScroll={_onScroll}
           isInfinity={false}
           isAutoScroll={false}
@@ -138,15 +138,7 @@ function DDD() {
           customSlideAnimation={customSlidesAnimation}
         />
       </View>
-    </SafeAreaView>
-  )
-}
-
-export const CustomSlides = () => {
-  return (
-    <SafeAreaProvider>
-      <DDD />
-    </SafeAreaProvider>
+    </View>
   )
 }
 

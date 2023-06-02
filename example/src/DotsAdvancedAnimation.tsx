@@ -3,7 +3,6 @@ import {
   Animated,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -120,7 +119,7 @@ export const DotsAdvancedAnimation = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, { width: CONTAINER_WIDTH }]}>
       <View>
         <Carousel
           getCarouselRef={(ref) => {
@@ -143,7 +142,7 @@ export const DotsAdvancedAnimation = () => {
           customDots={renderCustomDots}
         />
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
 
@@ -151,6 +150,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    alignSelf: 'center',
   },
   imageStyle: {
     width: '100%',

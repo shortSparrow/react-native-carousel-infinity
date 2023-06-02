@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { SafeAreaView, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import {
   Carousel,
   CarouselRef,
@@ -29,7 +29,7 @@ export const DotsAnimation = () => {
   const carouselRef = useRef<CarouselRef | null>(null)
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View>
         <Carousel
           getCarouselRef={(ref) => {
@@ -53,7 +53,7 @@ export const DotsAnimation = () => {
           dotsContainerStyles={styles.dotsContainer}
         />
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
 
