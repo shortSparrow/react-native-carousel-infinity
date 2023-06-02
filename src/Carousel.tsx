@@ -22,7 +22,7 @@ import {
 } from './hooks/useScrollSlideInterpolatedStyles'
 import { generateFakeItems } from './utils/generateFakeItems'
 import { styles } from './Carousel.style'
-import type { CarouselRef, Props } from './Carousel.types'
+import type { CarouselRef, Props, ScrollingAnimated } from './Carousel.types'
 
 const DEFAULT_SLIDE_WIDTH = Dimensions.get('window').width
 const DEFAULT_FAKE_PER_SIDE = 2
@@ -73,7 +73,9 @@ export const Carousel = (props: Props) => {
       startFromIndex * (slideWidth + fullSlideHorizontalOffset)
     : startFromIndex * (slideWidth + fullSlideHorizontalOffset)
   // shows real offset
-  const scrolling = useRef(new Animated.Value(initialOffset))
+  const scrolling = useRef(
+    new Animated.Value(initialOffset)
+  ) as React.MutableRefObject<ScrollingAnimated>
 
   // scrollViewOffset needed for adding custom smooth scroll with animation
   const scrollViewOffset = useRef(new Animated.Value(initialOffset)).current

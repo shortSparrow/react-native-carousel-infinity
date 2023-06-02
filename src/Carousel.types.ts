@@ -1,4 +1,5 @@
 import type {
+  Animated,
   ImageProps,
   ImageSourcePropType,
   ImageStyle,
@@ -10,6 +11,7 @@ import type { DOTS_ANIMATION_TYPE } from './hooks/useScrollDotsInterpolatedStyle
 import type { SLIDE_ANIMATION_TYPE } from './hooks/useScrollSlideInterpolatedStyles'
 
 export type SlideItem = { id: string; image: ImageSourcePropType }
+export type ScrollingAnimated = Animated.Value & { _value: number }
 
 export type Props = ScrollViewProps & {
   images: SlideItem[]
