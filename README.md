@@ -152,6 +152,5 @@ const Component = () => {
 
 
 ## License
----
 MIT
 
