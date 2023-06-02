@@ -7,7 +7,11 @@ import { CustomSlides } from './CustomSlides'
 import { Button, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 
-const list = [
+type CarouselList = {
+  name: string
+  carousel: JSX.Element
+}
+const carouselList = [
   { name: 'Simple Carousel', carousel: <SimpleCarousel /> },
   { name: 'Dots Animation', carousel: <DotsAnimation /> },
   { name: 'Dots Advanced Animation', carousel: <DotsAdvancedAnimation /> },
@@ -15,17 +19,14 @@ const list = [
 ]
 
 export default function App() {
-  const [currentVisible, setCurrentVisible] = useState<{
-    name: string
-    carousel: JSX.Element
-  } | null>(null)
+  const [currentVisible, setCurrentVisible] = useState<CarouselList | null>(null)
 
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         {!currentVisible ? (
           <View style={styles.buttonContainer}>
-            {list.map((renderItem) => (
+            {carouselList.map((renderItem) => (
               <View key={renderItem.name} style={styles.buttonWrapper}>
                 <Button title={renderItem.name} onPress={() => setCurrentVisible(renderItem)} />
               </View>
