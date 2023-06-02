@@ -33,7 +33,7 @@ const DEFAULT_ANIMATION_DURATION = 500
 export const Carousel = (props: Props) => {
   const {
     slideWidth = DEFAULT_SLIDE_WIDTH,
-    slideHorizontalOffset = 10,
+    slideHorizontalOffset = 0,
     isAutoScroll = false,
     autoScrollSlideInterval = DEFAULT_SLIDE_INTERVAL,
     autoScrollSlideInteractionDelay = DEFAULT_SLIDE_INTERACTION_DELAY,
