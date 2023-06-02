@@ -23,7 +23,11 @@ type UseScrollSlideInterpolatedStyles = {
   customSlideAnimation?: (
     hiddenIndexScrolling: undefined | number,
     i: number,
-    interpolate: (slideItemIndex: number, minValue: number, maxValue: number) => any
+    interpolate: (
+      slideItemIndex: number,
+      minValue: number | string,
+      maxValue: number | string
+    ) => any
   ) => ViewStyle
 }
 

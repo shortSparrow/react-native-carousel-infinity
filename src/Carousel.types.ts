@@ -52,6 +52,7 @@ export type Props = ScrollViewProps & {
   dotStyles?: ViewStyle
   getCarouselRef?: (ref: CarouselRef) => void
   isInfinity?: boolean
+  startFromIndex?: number
 }
 
 export type CarouselRef = {

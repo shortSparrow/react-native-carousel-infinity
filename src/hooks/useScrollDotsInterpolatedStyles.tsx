@@ -17,7 +17,11 @@ type UseScrollDotsInterpolatedStyles = {
   dotsAnimationType: DOTS_ANIMATION_TYPE
   customDotsAnimation?: (
     i: number,
-    interpolate: (slideItemIndex: number, minValue: number, maxValue: number) => any
+    interpolate: (
+      slideItemIndex: number,
+      minValue: number | string,
+      maxValue: number | string
+    ) => any
   ) => any
   isInfinity?: boolean
 }

@@ -25,7 +25,7 @@ const SLIDE_WIDTH = 100
 const SLIDE_HORIZONTAL_OFFSET = 10
 const FAKE_PER_SIDE = 8
 
-export default function DotsAnimation() {
+export const DotsAnimation = () => {
   const carouselRef = useRef<CarouselRef | null>(null)
 
   return (

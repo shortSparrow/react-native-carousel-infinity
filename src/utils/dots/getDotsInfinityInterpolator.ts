@@ -7,7 +7,7 @@ export const getDotsInfinityInterpolator =
     slidesCount: number,
     fakeImagePerSide: number
   ) =>
-  (slideItemIndex: number, minValue: number, maxValue: number): any => {
+  (slideItemIndex: number, minValue: number | string, maxValue: number | string): any => {
     const lastIndex = slidesCount + fakeImagePerSide - 1
     const inputRange = [...Array(slidesCount + fakeImagePerSide)].map(
       (_, i) => (i + 1) * slideWidth
@@ -53,7 +53,7 @@ export const getDotsInfinityInterpolator =
             slideItemIndex * slideWidth,
             (slideItemIndex + 1) * slideWidth,
           ],
-          outputRange: [minValue, maxValue, minValue],
+          outputRange: [minValue, maxValue, minValue] as string[] | number[],
           extrapolate: 'clamp',
         })
     }

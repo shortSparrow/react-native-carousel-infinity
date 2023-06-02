@@ -60,6 +60,7 @@ export const Carousel = (props: Props) => {
     getCarouselRef,
     isInfinity = true,
     customSlides,
+    startFromIndex = 0,
 
     ...rest
   } = props
@@ -67,8 +68,9 @@ export const Carousel = (props: Props) => {
   const [currentContainerWidth, setCurrentContainerWidth] = useState(containerWidth)
   const fullSlideHorizontalOffset = slideHorizontalOffset * 2
   const initialOffset = isInfinity
-    ? slideWidth * fakeImagePerSide + fullSlideHorizontalOffset * fakeImagePerSide
-    : 0
+    ? (slideWidth + fullSlideHorizontalOffset) * fakeImagePerSide +
+      startFromIndex * (slideWidth + fullSlideHorizontalOffset)
+    : startFromIndex * (slideWidth + fullSlideHorizontalOffset)
   // shows real offset
   const scrolling = useRef(new Animated.Value(initialOffset))
 

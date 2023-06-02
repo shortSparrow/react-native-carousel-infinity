@@ -40,7 +40,7 @@ const DOT_WIDTH = 15
 const DOR_HORIZONTAL_MARGIN = 10
 const DOT_FULL_WIDTH = DOT_WIDTH + DOR_HORIZONTAL_MARGIN * 2
 
-export default function DotsAdvancedAnimation() {
+export const DotsAdvancedAnimation = () => {
   const myAnim = useRef(new Animated.Value(0)).current
   const carouselRef = useRef<CarouselRef | null>(null)
 

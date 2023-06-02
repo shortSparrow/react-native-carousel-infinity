@@ -17,8 +17,8 @@ import {
   SLIDE_ANIMATION_TYPE,
   SlideItem,
 } from 'react-native-carousel-infinity'
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
 
-// TODO add another icons
 const initialList: SlideItem[] = [
   { id: '1', image: require('./image/1.jpeg') },
   { id: '2', image: require('./image/2.webp') },
@@ -40,7 +40,9 @@ const initialList: SlideItem[] = [
 const SLIDE_WIDTH = 100
 const SLIDE_HORIZONTAL_OFFSET = 10
 
-export default function CustomSlides() {
+function DDD() {
+  const insets = useSafeAreaInsets()
+
   const myAnim = useRef(new Animated.Value(0)).current
   const carouselRef = useRef<CarouselRef | null>(null)
   const { width: CAROUSEL_WIDTH } = useWindowDimensions()
@@ -125,8 +127,9 @@ export default function CustomSlides() {
           dotsAnimationType={DOTS_ANIMATION_TYPE.SCALE_WITH_OPACITY}
           contentContainerStyle={{
             paddingVertical: 100,
-            paddingHorizontal: CAROUSEL_WIDTH / 2 - (SLIDE_WIDTH + SLIDE_HORIZONTAL_OFFSET * 2) / 2, // TODO add safeSreaView
-            // paddingHorizontal: (CAROUSEL_WIDTH - 100) / 2 - (SLIDE_WIDTH + SLIDE_HORIZONTAL_OFFSET * 2) / 2,
+            paddingHorizontal:
+              (CAROUSEL_WIDTH - insets.left - insets.right) / 2 -
+              (SLIDE_WIDTH + SLIDE_HORIZONTAL_OFFSET * 2) / 2,
           }}
           slideStyles={{
             height: SLIDE_WIDTH,
@@ -136,6 +139,14 @@ export default function CustomSlides() {
         />
       </View>
     </SafeAreaView>
+  )
+}
+
+export const CustomSlides = () => {
+  return (
+    <SafeAreaProvider>
+      <DDD />
+    </SafeAreaProvider>
   )
 }
 
