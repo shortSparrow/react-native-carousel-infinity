@@ -39,7 +39,9 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "carousel",
+    "infinity carousel"
   ],
   "repository": "https://github.com/shortSparrow/react-native-carousel-infinity",
   "author": "Oleksandr Volkov <formobileprima@gmail.com> (https://github.com/shortSparrow)",
