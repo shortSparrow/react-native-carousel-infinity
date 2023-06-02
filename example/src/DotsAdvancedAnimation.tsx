@@ -120,28 +120,26 @@ export const DotsAdvancedAnimation = () => {
 
   return (
     <View style={[styles.container, { width: CONTAINER_WIDTH }]}>
-      <View>
-        <Carousel
-          getCarouselRef={(ref) => {
-            carouselRef.current = ref
-          }}
-          onScroll={_onScroll}
-          isInfinity={true}
-          isAutoScroll={false}
-          fakeImagePerSide={FAKE_PER_SIDE}
-          images={initialList}
-          slideHorizontalOffset={SLIDE_HORIZONTAL_OFFSET}
-          slideWidth={SLIDE_WIDTH}
-          slideAlign={'center'}
-          slideAnimationType={SLIDE_ANIMATION_TYPE.NO_EFFECTS}
-          dotsAnimationType={DOTS_ANIMATION_TYPE.SCALE}
-          slideStyles={{
-            height: SLIDE_WIDTH,
-          }}
-          imageStyles={styles.imageStyle}
-          customDots={renderCustomDots}
-        />
-      </View>
+      <Carousel
+        getCarouselRef={(ref) => {
+          carouselRef.current = ref
+        }}
+        onScroll={_onScroll}
+        isInfinity={true}
+        isAutoScroll={false}
+        fakeImagePerSide={FAKE_PER_SIDE}
+        images={initialList}
+        slideHorizontalOffset={SLIDE_HORIZONTAL_OFFSET}
+        slideWidth={SLIDE_WIDTH}
+        slideAlign={'center'}
+        slideAnimationType={SLIDE_ANIMATION_TYPE.NO_EFFECTS}
+        dotsAnimationType={DOTS_ANIMATION_TYPE.SCALE}
+        slideStyles={{
+          height: SLIDE_WIDTH,
+        }}
+        imageStyles={styles.imageStyle}
+        customDots={renderCustomDots}
+      />
     </View>
   )
 }

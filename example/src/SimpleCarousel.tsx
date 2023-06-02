@@ -1,5 +1,4 @@
 import React from 'react'
-import { SafeAreaView } from 'react-native'
 import {
   Carousel,
   DOTS_ANIMATION_TYPE,

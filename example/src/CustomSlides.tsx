@@ -6,7 +6,6 @@ import {
   NativeSyntheticEvent,
   Pressable,
   StyleSheet,
-  View,
   useWindowDimensions,
 } from 'react-native'
 import {
@@ -110,43 +109,35 @@ export const CustomSlides = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <View>
-        <Carousel
-          getCarouselRef={(ref) => {
-            carouselRef.current = ref
-          }}
-          startFromIndex={2}
-          onScroll={_onScroll}
-          isInfinity={false}
-          isAutoScroll={false}
-          images={initialList}
-          slideHorizontalOffset={SLIDE_HORIZONTAL_OFFSET}
-          slideWidth={SLIDE_WIDTH}
-          slideAnimationType={SLIDE_ANIMATION_TYPE.NO_EFFECTS}
-          dotsAnimationType={DOTS_ANIMATION_TYPE.SCALE_WITH_OPACITY}
-          contentContainerStyle={{
-            paddingVertical: 100,
-            paddingHorizontal:
-              (CAROUSEL_WIDTH - insets.left - insets.right) / 2 -
-              (SLIDE_WIDTH + SLIDE_HORIZONTAL_OFFSET * 2) / 2,
-          }}
-          slideStyles={{
-            height: SLIDE_WIDTH,
-          }}
-          customSlides={renderCustomSlides}
-          customSlideAnimation={customSlidesAnimation}
-        />
-      </View>
-    </View>
+    <Carousel
+      getCarouselRef={(ref) => {
+        carouselRef.current = ref
+      }}
+      startFromIndex={2}
+      onScroll={_onScroll}
+      isInfinity={false}
+      isAutoScroll={false}
+      images={initialList}
+      slideHorizontalOffset={SLIDE_HORIZONTAL_OFFSET}
+      slideWidth={SLIDE_WIDTH}
+      slideAnimationType={SLIDE_ANIMATION_TYPE.NO_EFFECTS}
+      dotsAnimationType={DOTS_ANIMATION_TYPE.SCALE_WITH_OPACITY}
+      contentContainerStyle={{
+        paddingVertical: 100,
+        paddingHorizontal:
+          (CAROUSEL_WIDTH - insets.left - insets.right) / 2 -
+          (SLIDE_WIDTH + SLIDE_HORIZONTAL_OFFSET * 2) / 2,
+      }}
+      slideStyles={{
+        height: SLIDE_WIDTH,
+      }}
+      customSlides={renderCustomSlides}
+      customSlideAnimation={customSlidesAnimation}
+    />
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
   imageStyle: {
     width: '100%',
     height: '100%',

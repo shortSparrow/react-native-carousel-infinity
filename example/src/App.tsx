@@ -4,37 +4,40 @@ import { SimpleCarousel } from './SimpleCarousel'
 import { DotsAnimation } from './DotsAnimation'
 import { DotsAdvancedAnimation } from './DotsAdvancedAnimation'
 import { CustomSlides } from './CustomSlides'
-import { Button, StyleSheet, View } from 'react-native'
+import { Button, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 
 const list = [
-  { name: 'SimpleCarousel', carousel: <SimpleCarousel /> },
-  { name: 'DotsAnimation', carousel: <DotsAnimation /> },
-  { name: 'DotsAdvancedAnimation', carousel: <DotsAdvancedAnimation /> },
-  { name: 'CustomSlides', carousel: <CustomSlides /> },
+  { name: 'Simple Carousel', carousel: <SimpleCarousel /> },
+  { name: 'Dots Animation', carousel: <DotsAnimation /> },
+  { name: 'Dots Advanced Animation', carousel: <DotsAdvancedAnimation /> },
+  { name: 'Custom Slides', carousel: <CustomSlides /> },
 ]
 
 export default function App() {
-  const [currentVisible, setCurrentVisible] = useState(list[0])
+  const [currentVisible, setCurrentVisible] = useState<{
+    name: string
+    carousel: JSX.Element
+  } | null>(null)
 
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <View style={styles.buttonContainer}>
-          {list.map((renderItem) => (
-            <View
-              key={renderItem.name}
-              style={[
-                styles.buttonWrapper,
-                renderItem.name === currentVisible?.name && styles.active,
-              ]}
-            >
-              <Button title={renderItem.name} onPress={() => setCurrentVisible(renderItem)} />
-            </View>
-          ))}
-
-        </View>
-        <View style={styles.carouselWrapper}>{currentVisible?.carousel}</View>
+        {!currentVisible ? (
+          <View style={styles.buttonContainer}>
+            {list.map((renderItem) => (
+              <View key={renderItem.name} style={styles.buttonWrapper}>
+                <Button title={renderItem.name} onPress={() => setCurrentVisible(renderItem)} />
+              </View>
+            ))}
+          </View>
+        ) : (
+          <View style={styles.carouseContainer}>
+            <Button title='go back' onPress={() => setCurrentVisible(null)} />
+            <Text style={styles.carouselTitle}>Current Carousel: {currentVisible.name}</Text>
+            <View style={styles.carouselWrapper}>{currentVisible?.carousel}</View>
+          </View>
+        )}
       </SafeAreaView>
     </SafeAreaProvider>
   )
@@ -46,6 +49,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     paddingTop: 10,
+    justifyContent: 'center',
+    flex: 1,
   },
   buttonWrapper: {
     flexDirection: 'row',
@@ -53,12 +58,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 5,
   },
-
-  active: {
-    backgroundColor: 'lightgreen',
+  carouseContainer: {
+    flex: 1,
+    paddingVertical: 30,
   },
   carouselWrapper: {
     flex: 1,
     justifyContent: 'center',
+  },
+  carouselTitle: {
+    textAlign: 'center',
+    fontSize: 17,
+    paddingVertical: 20,
   },
 })

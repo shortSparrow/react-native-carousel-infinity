@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import {
   Carousel,
   CarouselRef,
@@ -29,39 +29,31 @@ export const DotsAnimation = () => {
   const carouselRef = useRef<CarouselRef | null>(null)
 
   return (
-    <View style={styles.container}>
-      <View>
-        <Carousel
-          getCarouselRef={(ref) => {
-            carouselRef.current = ref
-          }}
-          isInfinity={true}
-          isAutoScroll={false}
-          fakeImagePerSide={FAKE_PER_SIDE}
-          images={initialList}
-          slideHorizontalOffset={SLIDE_HORIZONTAL_OFFSET}
-          slideWidth={SLIDE_WIDTH}
-          slideAlign={'center'}
-          slideAnimationType={SLIDE_ANIMATION_TYPE.NO_EFFECTS}
-          dotsAnimationType={DOTS_ANIMATION_TYPE.SCALE}
-          slideStyles={{
-            height: SLIDE_WIDTH,
-          }}
-          customDotsAnimation={(index, interpolate) => ({
-            transform: [{ translateY: interpolate(index, 0, -20) }],
-          })}
-          dotsContainerStyles={styles.dotsContainer}
-        />
-      </View>
-    </View>
+    <Carousel
+      getCarouselRef={(ref) => {
+        carouselRef.current = ref
+      }}
+      isInfinity={true}
+      isAutoScroll={false}
+      fakeImagePerSide={FAKE_PER_SIDE}
+      images={initialList}
+      slideHorizontalOffset={SLIDE_HORIZONTAL_OFFSET}
+      slideWidth={SLIDE_WIDTH}
+      slideAlign={'center'}
+      slideAnimationType={SLIDE_ANIMATION_TYPE.NO_EFFECTS}
+      dotsAnimationType={DOTS_ANIMATION_TYPE.SCALE}
+      slideStyles={{
+        height: SLIDE_WIDTH,
+      }}
+      customDotsAnimation={(index, interpolate) => ({
+        transform: [{ translateY: interpolate(index, 0, -20) }],
+      })}
+      dotsContainerStyles={styles.dotsContainer}
+    />
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
   dotsContainer: {
     marginTop: 70,
     flexDirection: 'row',

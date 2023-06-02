@@ -9,7 +9,6 @@ import {
   Platform,
   TouchableOpacity,
   NativeSyntheticEvent,
-  LayoutChangeEvent,
 } from 'react-native'
 import debounce from 'lodash.debounce'
 import {
@@ -30,7 +29,6 @@ const DEFAULT_SLIDE_INTERVAL = 4000
 const DEFAULT_SLIDE_INTERACTION_DELAY = 1000
 const DEFAULT_ANIMATION_DURATION = 500
 
-// TODO add startFromIndex
 export const Carousel = (props: Props) => {
   const {
     fakeImagePerSide = props.isInfinity ? DEFAULT_FAKE_PER_SIDE : 0,
@@ -314,7 +312,6 @@ export const Carousel = (props: Props) => {
   const dotsContainerStyle = dotsContainerStyles ?? styles.dotsContainer
   const dotStyle = dotStyles ?? styles.dot
 
-  console.log('UPDATE: ', )
   return (
     <View
       style={[
