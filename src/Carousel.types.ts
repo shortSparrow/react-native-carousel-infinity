@@ -24,7 +24,6 @@ export type Props = ScrollViewProps & {
   slideAlign?: 'center' | 'left' | number
   containerWidth?: number
   dotsAnimationType?: DOTS_ANIMATION_TYPE
-  scrollViewRef?: React.RefObject<ScrollView>
   customSlideAnimation?: (
     hiddenIndexScrolling: undefined | number,
     i: number,
