@@ -133,8 +133,8 @@ const Component = () => {
             transform: [
               {
                 translateX: myAnim.interpolate({
-                  inputRange: [100, 300, 700],
-                  outputRange: [10, 25, 99],
+                  inputRange: [900, 960, 1440, 1500],
+                  outputRange: [-107.5, 0, 140, 252.5],
                   extrapolate: 'clamp',
                 }),
               },
