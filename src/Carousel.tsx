@@ -29,9 +29,10 @@ const DEFAULT_SLIDE_INTERVAL = 4000
 const DEFAULT_SLIDE_INTERACTION_DELAY = 1000
 const DEFAULT_ANIMATION_DURATION = 500
 
+// TODO add startFromIndex
 export const Carousel = (props: Props) => {
   const {
-    fakeImagePerSide = DEFAULT_FAKE_PER_SIDE,
+    fakeImagePerSide = props.isInfinity ? DEFAULT_FAKE_PER_SIDE : 0,
     slideWidth = DEFAULT_SLIDE_WIDTH,
     slideHorizontalOffset = 10,
     isAutoScroll = false,
@@ -340,8 +341,6 @@ export const Carousel = (props: Props) => {
           contentContainerStyle={{
             paddingHorizontal: horizontalMargin,
             paddingTop: slideAnimationType === SLIDE_ANIMATION_TYPE.MOVE_UP ? 25 : 0,
-            // paddingTop: 100,
-            // paddingBottom: 100,
           }}
           {...rest}
         >

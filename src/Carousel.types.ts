@@ -13,7 +13,7 @@ export type SlideItem = { id: string; image: ImageSourcePropType }
 
 export type Props = ScrollViewProps & {
   images: SlideItem[]
-  fakeImagePerSide: number
+  fakeImagePerSide?: number
   slideWidth?: number
   isAutoScroll?: boolean
   autoScrollSlideInterval?: number
