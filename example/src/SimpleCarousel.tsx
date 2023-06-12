@@ -35,7 +35,7 @@ export const SimpleCarousel = () => {
       images={initialList}
       slideHorizontalOffset={SLIDE_HORIZONTAL_OFFSET}
       slideWidth={SLIDE_WIDTH}
-      slideAlign={'center'}
+      slideAlign='symmetric'
       slideAnimationType={SLIDE_ANIMATION_TYPE.MOVE_UP}
       dotsAnimationType={DOTS_ANIMATION_TYPE.SCALE}
       slideStyles={{

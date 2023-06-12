@@ -39,7 +39,7 @@ export const DotsAnimation = () => {
       images={initialList}
       slideHorizontalOffset={SLIDE_HORIZONTAL_OFFSET}
       slideWidth={SLIDE_WIDTH}
-      slideAlign={'center'}
+      slideAlign='symmetric'
       slideAnimationType={SLIDE_ANIMATION_TYPE.NO_EFFECTS}
       dotsAnimationType={DOTS_ANIMATION_TYPE.SCALE}
       slideStyles={{

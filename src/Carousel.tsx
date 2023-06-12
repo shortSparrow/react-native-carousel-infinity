@@ -306,7 +306,7 @@ export const Carousel = (props: Props) => {
   }, [tryStartAutoPlay, stopAutoPlay, isAutoScroll])
 
   const horizontalMargin = useMemo(() => {
-    if (slideAlign === 'center') {
+    if (slideAlign === 'symmetric') {
       if (!currentContainerWidth) return 0
       const x = currentContainerWidth % (slideWidth + slideHorizontalOffset * 2)
 

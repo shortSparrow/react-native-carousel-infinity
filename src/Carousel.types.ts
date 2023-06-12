@@ -23,7 +23,7 @@ export type Props = ScrollViewProps & {
   slideHorizontalOffset?: number
   slideAnimationType?: SLIDE_ANIMATION_TYPE
   animationDuration?: number
-  slideAlign?: 'center' | 'left' | number
+  slideAlign?: 'symmetric' | 'left' | number
   containerWidth?: number
   dotsAnimationType?: DOTS_ANIMATION_TYPE
   customSlideAnimation?: (

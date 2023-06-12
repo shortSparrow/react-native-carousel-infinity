@@ -1,6 +1,6 @@
 {
   "name": "react-native-carousel-infinity",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Fast and smooth carousel for react native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -9,7 +9,6 @@
   "source": "src/index",
   "files": [
     "src",
-    "lib",
     "android",
     "ios",
     "cpp",
